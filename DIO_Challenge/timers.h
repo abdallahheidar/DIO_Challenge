@@ -1,3 +1,10 @@
+/**
+ * @file	timers.h
+ * @author	Abdallah Heidar
+ * @date	22 Jan 2020
+ * @brief	The timer driver definitions and function prototypes 
+ */
+
 #ifndef TIMERS_H_
 #define TIMERS_H_
 
