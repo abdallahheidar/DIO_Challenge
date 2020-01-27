@@ -6,13 +6,14 @@
  */
 
 #include "timers.h"
+#include "macros.h"
 
 uint8_t g_duty;
 
 #define FULL_DUTY 100
 #define  FREQUENCY 8000000UL
 
-uint8_t prescaler = T0_NO_CLOCK;
+uint8_t tim0_prescaler = T0_NO_CLOCK;
 uint8_t T1_prescaler;
 uint8_t T2_prescaler;
 
@@ -37,7 +38,7 @@ void timer0Init(En_timer0Mode_t en_mode, En_timer0OC_t en_OC0,
 				if( en_mode == T0_COMP_MODE){
 					 OCR0 = u8_outputCompare;
 				}
-				prescaler = en_prescal;
+				tim0_prescaler = en_prescal;
 				TIMSK |= en_interruptMask;
 				}				
 					
@@ -65,7 +66,7 @@ uint8_t timer0Read(void){
  */
 void timer0Start(void){
 	
-	TCCR0 |= prescaler;
+	TCCR0 |= tim0_prescaler;
 }
 
 /**
@@ -87,7 +88,7 @@ void timer0DelayMs(uint16_t u16_delay_in_ms){
 			//overflows =  u16_delay_in_ms * FREQUENCY / (1000 * 255 *prescaler);
 		timer0Start();
 		while(u16_delay_in_ms--){
-			timer0Set(6); // Preload with 256 - 250 counts
+			timer0Set(240); // Preload with 256 - 250 counts
 			while(!(TIFR & (1 << 0)));
 			TIFR |= (1 << 0); // clear with writing one 
 		}
@@ -202,9 +203,12 @@ void timer1SwPWM(uint8_t u8_dutyCycle,uint8_t u8_frequency);
  * @param outputCompare
  * @param interruptMask
  */
-void timer2Init(En_timer2Mode_t en_mode,En_timer2OC_t en_OC,
-				En_timer2perscaler_t en_prescal, uint8_t u8_initialValue,
-			    uint8_t u8_outputCompare, uint8_t u8_assynchronous,
+void timer2Init(En_timer2Mode_t en_mode,
+				En_timer2OC_t en_OC,
+				En_timer2perscaler_t en_prescal,
+				uint8_t u8_initialValue,
+			    uint8_t u8_outputCompare,
+				uint8_t u8_assynchronous,
 			    En_timer2Interrupt_t en_interruptMask)
 				{
 					TCCR2 |= en_mode | en_OC ;			
@@ -267,31 +271,35 @@ void timer2DelayMs(uint16_t u16_delay_in_ms){
  * @brief Delay function
  * @param u16_delay_in_us the time in us
  */
-void timer2DelayUs(uint32_t u16_delay_in_us);
+void timer2DelayUs(uint32_t u32_delay_in_us)
+{
+	timer2Init(T2_COMP_MODE, T2_OC2_DIS, T2_PRESCALER_NO, 0, 14, 0, T2_INTERRUPT_CMP);
+	timer2Start();
+	while(u32_delay_in_us)
+	{
+		while(!(GET_BIT(TIFR,7)));
+		SET_BIT(TIFR,7);
+		u32_delay_in_us--;
+	}
+}
 
 /**
  * @brief SW PWM function
  * @param u8_dutyCycle signal duty cycle
  * @param u8_frequency signal frequency
  */
-void timer2SwPWM(uint8_t u8_dutyCycle,uint8_t u8_frequency);
-
-
-
-
-// ISR(t0_){
-// 	
-// 	static uint8_t counter= 0 ; // it will be erased during build
-// 	
-// 	counter++;
-// 	
-// 	if (counter == g_duty)
-// 	{
-// 		clearbit
-// 	}
-// 	else if (counter == FULL_DUTY )
-// 	{
-// 		setbit
-// 		counter = 0 ;
-// 	}
-// }
+void timer2SwPWM(uint8_t gpio_port, uint8_t gpio_pin, uint8_t u8_dutyCycle, uint8_t u8_frequency)
+{
+	uint32_t Period = (1.00/u8_frequency)*1000000.00;
+	uint32_t Ton = Period * (u8_dutyCycle/100.00);
+	uint32_t Toff = Period - Ton;
+	uint8_t cycles = 20;
+	while(cycles)
+	{
+		gpioPinWrite(gpio_port, gpio_pin, HIGH);
+		timer2DelayUs(Ton);
+		gpioPinWrite(gpio_port, gpio_pin, LOW);
+		timer2DelayUs(Toff);
+		cycles--;
+	}
+}

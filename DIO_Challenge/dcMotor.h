@@ -1,41 +1,93 @@
+/*
+ * dcMotor.h
+ *
+ * Created: 1/26/2020 10:28:41 AM
+ *  Author: Khaled Magdy
+ */ 
+
+
 #ifndef DCMOTOR_H_
 #define DCMOTOR_H_
-#include "dcMotorConfig.h"
+
+#include "gpio.h"
 #include "timers.h"
 
-typedef enum En_motorType_t{
-	MOT_1,
-	MOT_2
-}En_motorType_t;
+#define M1EN_GPIO	(GPIOD)
+#define M1EN_BIT	(BIT4)
 
-typedef enum En_motorDir_t{
-	STOP,
-	FORWARD,
-	BACKWARD
-}En_motorDir_t;
+#define M2EN_GPIO	(GPIOD)
+#define M2EN_BIT	(BIT5)
 
-/**
- * Description: 
- * @param
- */
-void MotorDC_Init(En_motorType_t en_motor_number);
+#define M1D1_GPIO	(GPIOD)
+#define M1D1_BIT	(BIT2)
 
-/**
- * Description: 
- * @param 
- * @param 
- */
-void MotorDC_Dir(En_motorType_t en_motor_number, En_motorDir_t en_motor_dir);
+#define M1D2_GPIO	(GPIOD)
+#define M1D2_BIT	(BIT3)
+
+#define M2D1_GPIO	(GPIOD)
+#define M2D1_BIT	(BIT6)
+
+#define M2D2_GPIO	(GPIOD)
+#define M2D2_BIT	(BIT7)
 
 /**
- * Description: 
- * @param 
+ * Description:
+ * @param value
  */
-void MotorDC_Speed_PollingWithT0(uint8_t u8_motor_speed);
+void dcMotor1Enable(void);
+/**
+ * Description:
+ * @param value
+ */
+void dcMotor1Disable(void);
+/**
+ * Description:
+ * @param value
+ */
+void dcMotor1SetDCD(uint8_t u8_dutyCycle, uint8_t u8_direction);
 
 /**
- * Description: set the port value (which is PORT register)
- * @param 
+ * Description:
+ * @param value
  */
-void MotorDC_Speed_HwPWM(uint8_t u8_motor_speed);
-#endif /* MOTORDC_H_ */
+//----------------------------------
+void dcMotor2Enable(void);
+/**
+ * Description:
+ * @param value
+ */
+void dcMotor2Disable(void);
+/**
+ * Description:
+ * @param value
+ */
+void dcMotor2SetDCD(uint8_t u8_dutyCycle, uint8_t u8_direction);
+//---------------------------------------------------------------------
+//----------------------[ Robotic Car Control ]------------------------
+/**
+ * Description:
+ * @param value
+ */
+void MoveForward(uint8_t u8_dutyCycle);
+/**
+ * Description:
+ * @param value
+ */
+void MoveBackward(uint8_t u8_dutyCycle);
+/**
+ * Description:
+ * @param value
+ */
+void CWrotate(uint8_t u8_dutyCycle);
+/**
+ * Description:
+ * @param value
+ */
+void CCWrotate(uint8_t u8_dutyCycle);
+/**
+ * Description:
+ * @param value
+ */
+void carSTOP(void);
+
+#endif /* DCMOTOR_H_ */

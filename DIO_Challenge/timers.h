@@ -245,6 +245,6 @@ void timer2DelayUs(uint32_t u16_delay_in_us);
  * Description:
  * @param dutyCycle
  */
-void timer2SwPWM(uint8_t u8_dutyCycle,uint8_t u8_frequency);
+void timer2SwPWM(uint8_t gpio_port, uint8_t gpio_pin, uint8_t u8_dutyCycle,uint8_t u8_frequency);
 
 #endif /* TIMERS_H_ */

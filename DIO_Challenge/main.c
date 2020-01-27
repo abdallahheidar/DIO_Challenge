@@ -2,6 +2,8 @@
 #include "pushButton.h"
 #include "sevenSeg.h"
 #include "softwareDelay.h"
+#include "timers.h"
+#include "gpio.h"
 
 void Go_State(void);
 void Ready_State(void);
@@ -13,6 +15,20 @@ void REQ3_Start(void);
 
 int main(void)
 {
+	Led_Init(LED_0);
+	
+	while(1)
+	{
+		timer2SwPWM(PORTB_DATA, BIT4, 50, 50);
+	}
+	
+	while(1)
+	{
+		Led_Off(LED_0);
+		timer0DelayMs(10);
+		Led_On(LED_0);
+		timer0DelayMs(10);
+	}
 	uint8_t REQ_Select = 0;
 	gpioPinDirection(GPIOA, (BIT5 | BIT6 | BIT7), INPUT);
 	gpioPortWrite(GPIOA, (BIT5 | BIT6 | BIT7));
