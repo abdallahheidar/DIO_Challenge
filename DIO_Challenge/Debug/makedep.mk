@@ -4,6 +4,8 @@
 
 gpio.c
 
+HwPWM.c
+
 led.c
 
 main.c
@@ -13,6 +15,8 @@ pushButton.c
 sevenSeg.c
 
 softwareDelay.c
+
+SwICU.c
 
 timers.c
 

@@ -213,7 +213,7 @@ void timer2Init(En_timer2Mode_t en_mode,
 				{
 					TCCR2 |= en_mode | en_OC ;			
 					timer2Set(u8_initialValue);			
-					if( en_mode == T0_COMP_MODE){
+					if( en_mode == T2_COMP_MODE){
 						OCR2 = u8_outputCompare;
 					}
 					T2_prescaler  = en_prescal;

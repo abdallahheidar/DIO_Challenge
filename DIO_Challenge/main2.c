@@ -22,20 +22,19 @@ void REQ3_Start(void);
 
 int main(void)
 {
-	HwPWMInit();
-	HwPWMSetDuty(70, 100);
-	while (1)
-	{
-	}
-	
-	/*
+	sei();
+	gpioPinDirection(PORTD_DIR, BIT0, OUTPUT);
+	gpioPinWrite(PORTD_DATA, BIT0, LOW);
+	softwareDelayMs(500);
 	HwPWMInit();
 	while(1)
 	{
-		HwPWMSetDuty(50, 200);
-		softwareDelayMs(100);
+		for (int i = 0; i < 255; i++)
+		{
+			HwPWMSetDuty(i, 50);
+			softwareDelayMs(10);
+		}
 	}
-	*/
 	/*
 	Led_Init(LED_0);
 	
@@ -74,6 +73,11 @@ int main(void)
 	*/
 }
 
+ISR(TIMER1_OVF_vect)
+{
+	gpioPinWrite(PORTD_DATA, BIT0, HIGH);
+	softwareDelayMs(1000);
+}
 
 void Go_State(void)
 {

@@ -77,6 +77,65 @@
 #define TCNT2		*((reg_type8_t)(0X44))
 #define OCR2		*((reg_type8_t)(0X43))
 
+/*
+ * INT Pins
+ */
+
+#define ISC2    6
+
+/* GICR */
+#define INT1    7
+#define INT0    6
+#define INT2    5
+#define IVSEL   1
+#define IVCE    0
+
+/* GIFR */
+#define INTF1   7
+#define INTF0   6
+#define INTF2   5
+
+/* TIMSK */
+#define OCIE2   7
+#define TOIE2   6
+#define TICIE1  5
+#define OCIE1A  4
+#define OCIE1B  3
+#define TOIE1   2
+#define OCIE0   1
+#define TOIE0   0
+
+/* TIFR */
+#define OCF2    7
+#define TOV2    6
+#define ICF1    5
+#define OCF1A   4
+#define OCF1B   3
+#define TOV1    2
+#define OCF0    1
+#define TOV0    0
+
+
+/* TCCR1A */
+#define COM1A1  7
+#define COM1A0  6
+#define COM1B1  5
+#define COM1B0  4
+#define FOC1A   3
+#define FOC1B   2
+#define WGM11   1
+#define WGM10   0
+
+/* TCCR1B */
+#define ICNC1   7
+#define ICES1   6
+/* bit 5 reserved */
+#define WGM13   4
+#define WGM12   3
+#define CS12    2
+#define CS11    1
+#define CS10    0
+
 
 
 
