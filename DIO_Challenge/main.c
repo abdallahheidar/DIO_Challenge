@@ -196,7 +196,7 @@ void REQ3_Start(void)
 	}
 }
 
-
+/*
 ISR(INT2_vect) {
 	volatile uint8_t edgeDetect = SwICU_EdgeRisiging;
 	if (edgeDetect == SwICU_EdgeRisiging  )
@@ -217,3 +217,4 @@ ISR(INT2_vect) {
 		edgeDetect = SwICU_EdgeRisiging;
 	}
 }
+*/
